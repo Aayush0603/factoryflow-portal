@@ -21,13 +21,44 @@ function ProductDetails() {
     fetchProduct();
   }, [id]);
 
+  const handlePayment = async () => {
+    try {
+      // Create Razorpay order from backend
+      const res = await API.post("/create-order", {
+        inquiryId: null, // optional for now
+        amount: 500, // advance amount
+      });
+
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID, // safer way
+        amount: res.data.amount,
+        currency: "INR",
+        order_id: res.data.id,
+        name: "FactoryFlow",
+        description: `Advance Payment for ${product.name}`,
+        handler: async function (response) {
+          await API.post("/verify-payment", response);
+          alert("✅ Payment Successful!");
+        },
+        theme: {
+          color: "#1976d2",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error", error);
+      alert("Payment failed");
+    }
+  };
+
   if (!product) return <div className="container">Loading...</div>;
 
   return (
     <div className="container">
       <div className="product-details-container">
 
-        {/* Left - Image */}
         <div className="product-details-image">
           <img
             src={
@@ -38,7 +69,6 @@ function ProductDetails() {
           />
         </div>
 
-        {/* Right - Info */}
         <div className="product-details-info">
           <div className="product-details-title">
             {product.name}
@@ -66,8 +96,16 @@ function ProductDetails() {
           >
             Request Quote
           </button>
-        </div>
 
+          <button
+            className="cta-button"
+            style={{ marginTop: "15px", backgroundColor: "#28a745" }}
+            onClick={handlePayment}
+          >
+            Pay ₹500 Advance
+          </button>
+
+        </div>
       </div>
     </div>
   );
