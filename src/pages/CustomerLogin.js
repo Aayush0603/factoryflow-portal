@@ -6,10 +6,12 @@ import {
   Typography,
   TextField,
   Button,
-  Link
+  Link,
+  Divider
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import API from "../api";
+import { GoogleLogin } from "@react-oauth/google";
 
 function CustomerLogin() {
   const navigate = useNavigate();
@@ -21,6 +23,9 @@ function CustomerLogin() {
 
   const [loading, setLoading] = useState(false);
 
+  /* =========================
+     NORMAL LOGIN
+  ========================= */
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -40,6 +45,27 @@ function CustomerLogin() {
     }
 
     setLoading(false);
+  };
+
+  /* =========================
+     GOOGLE LOGIN
+  ========================= */
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await API.post("/customer/google-login", {
+        credential: credentialResponse.credential
+      });
+
+      localStorage.setItem("customerToken", res.data.token);
+      localStorage.setItem(
+        "customer",
+        JSON.stringify(res.data.customer)
+      );
+
+      navigate("/");
+    } catch (error) {
+      alert("Google login failed");
+    }
   };
 
   return (
@@ -82,6 +108,7 @@ function CustomerLogin() {
             Sign in to your account
           </Typography>
 
+          {/* ================= NORMAL LOGIN ================= */}
           <form onSubmit={handleLogin}>
             <TextField
               fullWidth
@@ -117,6 +144,18 @@ function CustomerLogin() {
             </Button>
           </form>
 
+          {/* ================= DIVIDER ================= */}
+          <Divider sx={{ my: 3 }}>OR</Divider>
+
+          {/* ================= GOOGLE LOGIN ================= */}
+          <Box display="flex" justifyContent="center">
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => alert("Google Login Failed")}
+            />
+          </Box>
+
+          {/* ================= SIGNUP LINK ================= */}
           <Typography
             sx={{ textAlign: "center", mt: 3, fontSize: "0.9rem" }}
           >
