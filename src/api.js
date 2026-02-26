@@ -1,18 +1,16 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://factoryflow-backend-a0vc.onrender.com/api"
+  baseURL: process.env.REACT_APP_API_URL + "/api/public",
 });
 
-// Attach token automatically
-API.interceptors.request.use((req) => {
+// 🔐 Attach token automatically
+API.interceptors.request.use((config) => {
   const token = localStorage.getItem("customerToken");
-
   if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
-
-  return req;
+  return config;
 });
 
 export default API;

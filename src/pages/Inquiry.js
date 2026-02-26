@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api";
-import "../index.css";
 
 function Inquiry() {
   const { id } = useParams();
 
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
@@ -14,85 +13,106 @@ function Inquiry() {
     message: "",
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const customer = JSON.parse(localStorage.getItem("customer"));
+
+    if (customer) {
+      setForm((prev) => ({
+        ...prev,
+        name: customer.name,
+        email: customer.email,
+      }));
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       await API.post("/inquiry", {
-        ...formData,
+        ...form,
         product: id,
       });
 
-      alert("Inquiry submitted successfully!");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        quantity: "",
-        message: "",
-      });
+      alert("Inquiry submitted successfully 🎉");
+
+      if (!isLoggedIn) {
+        setForm({
+          name: "",
+          email: "",
+          phone: "",
+          quantity: "",
+          message: "",
+        });
+      }
+
     } catch (error) {
       alert("Error submitting inquiry");
     }
   };
 
   return (
-    <div className="form-container">
-      <div className="form-title">Send Inquiry</div>
+    <div style={{ padding: "30px", maxWidth: "500px" }}>
+      <h2>Send Inquiry</h2>
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <input
-            className="form-input"
-            name="name"
-            placeholder="Your Name"
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Name"
+          value={form.name}
+          disabled={isLoggedIn}
+          onChange={(e) =>
+            setForm({ ...form, name: e.target.value })
+          }
+          required
+        />
+        <br /><br />
 
-        <div className="form-group">
-          <input
-            className="form-input"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          disabled={isLoggedIn}
+          onChange={(e) =>
+            setForm({ ...form, email: e.target.value })
+          }
+          required
+        />
+        <br /><br />
 
-        <div className="form-group">
-          <input
-            className="form-input"
-            name="phone"
-            placeholder="Phone"
-            onChange={handleChange}
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Phone"
+          value={form.phone}
+          onChange={(e) =>
+            setForm({ ...form, phone: e.target.value })
+          }
+        />
+        <br /><br />
 
-        <div className="form-group">
-          <input
-            className="form-input"
-            name="quantity"
-            placeholder="Quantity"
-            onChange={handleChange}
-          />
-        </div>
+        <input
+          type="number"
+          placeholder="Quantity"
+          value={form.quantity}
+          onChange={(e) =>
+            setForm({ ...form, quantity: e.target.value })
+          }
+        />
+        <br /><br />
 
-        <div className="form-group">
-          <textarea
-            className="form-input"
-            name="message"
-            placeholder="Message"
-            rows="4"
-            onChange={handleChange}
-          />
-        </div>
+        <textarea
+          placeholder="Message"
+          value={form.message}
+          onChange={(e) =>
+            setForm({ ...form, message: e.target.value })
+          }
+        />
+        <br /><br />
 
-        <button type="submit" className="primary-button">
+        <button type="submit">
           Submit Inquiry
         </button>
       </form>
