@@ -53,7 +53,7 @@ function CustomerLogin() {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const res = await API.post("/customer/google-login", {
-        credential: credentialResponse.credential
+        token: credentialResponse.credential  // ✅ FIXED HERE
       });
 
       localStorage.setItem("customerToken", res.data.token);
@@ -64,6 +64,7 @@ function CustomerLogin() {
 
       navigate("/");
     } catch (error) {
+      console.error("Google login error:", error);
       alert("Google login failed");
     }
   };
