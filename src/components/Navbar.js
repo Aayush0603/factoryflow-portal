@@ -32,39 +32,43 @@ function Navbar() {
       </div>
 
       {/* Right Side */}
-      <div style={{ display: "flex", alignItems: "center" }}>
-        {!token ? (
-          <>
-            <Link to="/login" style={linkStyle}>Login</Link>
-            <Link to="/signup" style={linkStyle}>Signup</Link>
-          </>
-        ) : (
-          <>
-            <span style={{ marginRight: "15px" }}>
-              Hi, <strong>{customer?.name}</strong>
-            </span>
+<div style={{ display: "flex", alignItems: "center" }}>
+  {!token ? (
+    <>
+      <Link to="/login" style={linkStyle}>Login</Link>
+      <Link to="/signup" style={linkStyle}>Signup</Link>
+    </>
+  ) : (
+    <>
+      <span style={{ marginRight: "15px" }}>
+        Hi, <strong>{customer?.name}</strong>
+      </span>
 
-            <Link to="/account" style={linkStyle}>
-              My Account
-            </Link>
+      <Link to="/account" style={linkStyle}>
+        My Account
+      </Link>
 
-            <button
-              onClick={handleLogout}
-              style={{
-                marginLeft: "10px",
-                padding: "6px 12px",
-                background: "#ef4444",
-                border: "none",
-                color: "white",
-                cursor: "pointer",
-                borderRadius: "6px"
-              }}
-            >
-              Logout
-            </button>
-          </>
-        )}
-      </div>
+      <Link to="/change-password" style={linkStyle}>
+        Change Password
+      </Link>
+
+      <button
+        onClick={handleLogout}
+        style={{
+          marginLeft: "10px",
+          padding: "6px 12px",
+          background: "#ef4444",
+          border: "none",
+          color: "white",
+          cursor: "pointer",
+          borderRadius: "6px"
+        }}
+      >
+        Logout
+      </button>
+    </>
+  )}
+</div>
     </div>
   );
 }

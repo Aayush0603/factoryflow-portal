@@ -10,30 +10,42 @@ import {
 import API from "../api";
 
 function ChangePassword() {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [message, setMessage] = useState("");
+
+  const [form, setForm] = useState({
+    currentPassword: "",
+    newPassword: ""
+  });
+
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const res = await API.post("/customer/change-password", {
-        currentPassword,
-        newPassword
-      });
+      await API.put("/customer/change-password", form);
 
-      setMessage(res.data.message);
+      alert("Password changed successfully");
+      setForm({ currentPassword: "", newPassword: "" });
+
     } catch (error) {
-      setMessage(error.response?.data?.message || "Error");
+      alert(error.response?.data?.message || "Error");
     }
+
+    setLoading(false);
   };
 
   return (
-    <Box p={4}>
-      <Card sx={{ maxWidth: 400, margin: "auto" }}>
+    <Box sx={{
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "linear-gradient(135deg, #0f172a, #1e293b)"
+    }}>
+      <Card sx={{ width: 400, borderRadius: 3 }}>
         <CardContent>
-          <Typography variant="h6" mb={2}>
+          <Typography variant="h5" mb={2}>
             Change Password
           </Typography>
 
@@ -43,8 +55,11 @@ function ChangePassword() {
               label="Current Password"
               type="password"
               margin="normal"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
+              value={form.currentPassword}
+              onChange={(e) =>
+                setForm({ ...form, currentPassword: e.target.value })
+              }
+              required
             />
 
             <TextField
@@ -52,8 +67,11 @@ function ChangePassword() {
               label="New Password"
               type="password"
               margin="normal"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              value={form.newPassword}
+              onChange={(e) =>
+                setForm({ ...form, newPassword: e.target.value })
+              }
+              required
             />
 
             <Button
@@ -61,16 +79,11 @@ function ChangePassword() {
               variant="contained"
               sx={{ mt: 2 }}
               type="submit"
+              disabled={loading}
             >
-              Update Password
+              {loading ? "Updating..." : "Update Password"}
             </Button>
           </form>
-
-          {message && (
-            <Typography mt={2}>
-              {message}
-            </Typography>
-          )}
         </CardContent>
       </Card>
     </Box>
