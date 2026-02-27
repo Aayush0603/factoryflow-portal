@@ -5,11 +5,11 @@ function Navbar() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("customerToken");
-  const user = JSON.parse(localStorage.getItem("customerUser") || "{}");
+  const customer = JSON.parse(localStorage.getItem("customer") || "{}");
 
   const handleLogout = () => {
     localStorage.removeItem("customerToken");
-    localStorage.removeItem("customerUser");
+    localStorage.removeItem("customer");
     navigate("/");
   };
 
@@ -18,7 +18,8 @@ function Navbar() {
       style={{
         display: "flex",
         justifyContent: "space-between",
-        padding: "15px 30px",
+        alignItems: "center",
+        padding: "15px 40px",
         background: "#111827",
         color: "white"
       }}
@@ -31,7 +32,7 @@ function Navbar() {
       </div>
 
       {/* Right Side */}
-      <div>
+      <div style={{ display: "flex", alignItems: "center" }}>
         {!token ? (
           <>
             <Link to="/login" style={linkStyle}>Login</Link>
@@ -39,8 +40,8 @@ function Navbar() {
           </>
         ) : (
           <>
-            <span style={{ marginRight: "10px" }}>
-              Hi, {user?.name}
+            <span style={{ marginRight: "15px" }}>
+              Hi, <strong>{customer?.name}</strong>
             </span>
 
             <Link to="/account" style={linkStyle}>
@@ -51,12 +52,12 @@ function Navbar() {
               onClick={handleLogout}
               style={{
                 marginLeft: "10px",
-                padding: "5px 10px",
+                padding: "6px 12px",
                 background: "#ef4444",
                 border: "none",
                 color: "white",
                 cursor: "pointer",
-                borderRadius: "4px"
+                borderRadius: "6px"
               }}
             >
               Logout
@@ -69,9 +70,10 @@ function Navbar() {
 }
 
 const linkStyle = {
-  marginRight: "15px",
+  marginRight: "20px",
   color: "white",
-  textDecoration: "none"
+  textDecoration: "none",
+  fontWeight: 500
 };
 
 export default Navbar;
