@@ -5,11 +5,14 @@ import {
   CardContent,
   Typography,
   TextField,
-  Button
+  Button,
+  Alert
 } from "@mui/material";
-import API from "../api";
+import { useNavigate } from "react-router-dom";
+import API from "../customerApi";
 
 function ChangePassword() {
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     currentPassword: "",
@@ -17,37 +20,67 @@ function ChangePassword() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage(null);
+    setError(null);
 
     try {
-      await API.put("/customer/change-password", form);
+      await API.put("/change-password", form);
 
-      alert("Password changed successfully");
-      setForm({ currentPassword: "", newPassword: "" });
+      setMessage("Password updated successfully. Please login again.");
 
-    } catch (error) {
-      alert(error.response?.data?.message || "Error");
+      // Clear login
+      localStorage.removeItem("customerToken");
+      localStorage.removeItem("customer");
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Server error");
     }
 
     setLoading(false);
   };
 
   return (
-    <Box sx={{
-      minHeight: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      background: "linear-gradient(135deg, #0f172a, #1e293b)"
-    }}>
-      <Card sx={{ width: 400, borderRadius: 3 }}>
-        <CardContent>
-          <Typography variant="h5" mb={2}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(135deg, #0f172a, #1e293b)"
+      }}
+    >
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 400,
+          borderRadius: 3,
+          boxShadow: "0 15px 40px rgba(0,0,0,0.25)"
+        }}
+      >
+        <CardContent sx={{ p: 4 }}>
+          <Typography
+            sx={{
+              fontSize: "1.6rem",
+              fontWeight: "bold",
+              mb: 2
+            }}
+          >
             Change Password
           </Typography>
+
+          {message && <Alert severity="success" sx={{ mb: 2 }}>{message}</Alert>}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
           <form onSubmit={handleSubmit}>
             <TextField
@@ -77,7 +110,7 @@ function ChangePassword() {
             <Button
               fullWidth
               variant="contained"
-              sx={{ mt: 2 }}
+              sx={{ mt: 3, py: 1.2 }}
               type="submit"
               disabled={loading}
             >

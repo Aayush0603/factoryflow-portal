@@ -8,7 +8,7 @@ import {
   Button
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
-import API from "../api";
+import API from "../customerApi";
 
 function ResetPassword() {
   const { token } = useParams();

@@ -9,7 +9,7 @@ import {
   Link
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import API from "../api";
+import API from "../customerApi";
 
 function CustomerSignup() {
   const navigate = useNavigate();

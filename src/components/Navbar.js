@@ -24,51 +24,54 @@ function Navbar() {
         color: "white"
       }}
     >
-      {/* Left Side */}
+      {/* LEFT */}
       <div>
         <Link to="/" style={linkStyle}>FactoryFlow</Link>
         <Link to="/products" style={linkStyle}>Products</Link>
         <Link to="/track-inquiry" style={linkStyle}>Track Inquiry</Link>
       </div>
 
-      {/* Right Side */}
-<div style={{ display: "flex", alignItems: "center" }}>
-  {!token ? (
-    <>
-      <Link to="/login" style={linkStyle}>Login</Link>
-      <Link to="/signup" style={linkStyle}>Signup</Link>
-    </>
-  ) : (
-    <>
-      <span style={{ marginRight: "15px" }}>
-        Hi, <strong>{customer?.name}</strong>
-      </span>
+      {/* RIGHT */}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {!token ? (
+          <>
+            <Link to="/login" style={linkStyle}>Login</Link>
+            <Link to="/signup" style={linkStyle}>Signup</Link>
+          </>
+        ) : (
+          <>
+            <span style={{ marginRight: "15px" }}>
+              Hi, <strong>{customer?.name}</strong>
+            </span>
 
-      <Link to="/account" style={linkStyle}>
-        My Account
-      </Link>
+            <Link to="/account" style={linkStyle}>
+              My Account
+            </Link>
 
-      <Link to="/change-password" style={linkStyle}>
-        Change Password
-      </Link>
+            {/* Show only if NOT Google user */}
+            {!customer?.googleId && (
+              <Link to="/change-password" style={linkStyle}>
+                Change Password
+              </Link>
+            )}
 
-      <button
-        onClick={handleLogout}
-        style={{
-          marginLeft: "10px",
-          padding: "6px 12px",
-          background: "#ef4444",
-          border: "none",
-          color: "white",
-          cursor: "pointer",
-          borderRadius: "6px"
-        }}
-      >
-        Logout
-      </button>
-    </>
-  )}
-</div>
+            <button
+              onClick={handleLogout}
+              style={{
+                marginLeft: "10px",
+                padding: "6px 12px",
+                background: "#ef4444",
+                border: "none",
+                color: "white",
+                cursor: "pointer",
+                borderRadius: "6px"
+              }}
+            >
+              Logout
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
