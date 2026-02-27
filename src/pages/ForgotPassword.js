@@ -17,10 +17,7 @@ function ForgotPassword() {
     e.preventDefault();
 
     try {
-      const res = await API.post("/customer/forgot-password", {
-        email
-      });
-
+      const res = await API.post("/customer/forgot-password", {email});
       setMessage(res.data.message);
     } catch (error) {
       setMessage(
