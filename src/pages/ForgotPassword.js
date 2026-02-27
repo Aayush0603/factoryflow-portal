@@ -14,15 +14,18 @@ function ForgotPassword() {
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await API.post("/customer/forgot-password", { email });
-      setMessage(res.data.message);
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Something went wrong");
-    }
-  };
+  try {
+    const res = await API.post("/customer/forgot-password", {
+      email
+    });
+
+    alert(res.data.message);
+  } catch (error) {
+    alert(error.response?.data?.message || "Server error");
+  }
+};
 
   return (
     <Box
