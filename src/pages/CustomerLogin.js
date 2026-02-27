@@ -157,16 +157,6 @@ function CustomerLogin() {
             </Button>
           </form>
 
-
-<Typography textAlign="center" mt={2}>
-  <Link
-    component="button"
-    onClick={() => navigate("/forgot-password")}
-  >
-    Forgot Password?
-  </Link>
-</Typography>
-
           {/* ===== Divider ===== */}
           <Divider sx={{ my: 3 }}>OR</Divider>
 
