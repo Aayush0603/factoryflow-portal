@@ -15,6 +15,9 @@ import Signup from "./pages/Signup";
 import CustomerLogin from "./pages/CustomerLogin";
 import CustomerProtectedRoute from "./components/CustomerProtectedRoute";
 import AccountPage from "./pages/AccountPage"; // create this file
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
         <Route path="/dealer-login" element={<DealerLogin />} />
         <Route path="/dealer-dashboard" element={<DealerDashboard />} />
         <Route path="/track-inquiry" element={<TrackInquiry />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/change-password" element={<ChangePassword />} />
 
         {/* ===== Customer Auth Routes ===== */}
         <Route path="/signup" element={<Signup />} />

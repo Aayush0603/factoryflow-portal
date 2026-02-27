@@ -23,9 +23,7 @@ function CustomerLogin() {
 
   const [loading, setLoading] = useState(false);
 
-  /* =========================
-     NORMAL LOGIN
-  ========================= */
+  /* ================= NORMAL LOGIN ================= */
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -47,13 +45,11 @@ function CustomerLogin() {
     setLoading(false);
   };
 
-  /* =========================
-     GOOGLE LOGIN
-  ========================= */
+  /* ================= GOOGLE LOGIN ================= */
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const res = await API.post("/customer/google-login", {
-        token: credentialResponse.credential  // ✅ FIXED HERE
+        credential: credentialResponse.credential
       });
 
       localStorage.setItem("customerToken", res.data.token);
@@ -64,7 +60,6 @@ function CustomerLogin() {
 
       navigate("/");
     } catch (error) {
-      console.error("Google login error:", error);
       alert("Google login failed");
     }
   };
@@ -109,7 +104,7 @@ function CustomerLogin() {
             Sign in to your account
           </Typography>
 
-          {/* ================= NORMAL LOGIN ================= */}
+          {/* ===== NORMAL LOGIN ===== */}
           <form onSubmit={handleLogin}>
             <TextField
               fullWidth
@@ -134,6 +129,23 @@ function CustomerLogin() {
               required
             />
 
+            {/* ✅ Forgot Password */}
+            <Typography
+              sx={{
+                textAlign: "right",
+                fontSize: "0.85rem",
+                mt: 1
+              }}
+            >
+              <Link
+                component="button"
+                underline="hover"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Forgot Password?
+              </Link>
+            </Typography>
+
             <Button
               fullWidth
               variant="contained"
@@ -145,10 +157,20 @@ function CustomerLogin() {
             </Button>
           </form>
 
-          {/* ================= DIVIDER ================= */}
+
+<Typography textAlign="center" mt={2}>
+  <Link
+    component="button"
+    onClick={() => navigate("/forgot-password")}
+  >
+    Forgot Password?
+  </Link>
+</Typography>
+
+          {/* ===== Divider ===== */}
           <Divider sx={{ my: 3 }}>OR</Divider>
 
-          {/* ================= GOOGLE LOGIN ================= */}
+          {/* ===== Google Login ===== */}
           <Box display="flex" justifyContent="center">
             <GoogleLogin
               onSuccess={handleGoogleSuccess}
@@ -156,7 +178,7 @@ function CustomerLogin() {
             />
           </Box>
 
-          {/* ================= SIGNUP LINK ================= */}
+          {/* ===== Signup Link ===== */}
           <Typography
             sx={{ textAlign: "center", mt: 3, fontSize: "0.9rem" }}
           >
