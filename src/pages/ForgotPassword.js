@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import API from "../api";
 import {
   Box,
   Card,
@@ -8,22 +7,31 @@ import {
   TextField,
   Button
 } from "@mui/material";
+import API from "../api";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault();   // ✅ VERY IMPORTANT
+    setLoading(true);
 
     try {
-      const res = await API.post("/customer/forgot-password", {email});
-      setMessage(res.data.message);
-    } catch (error) {
-      setMessage(
-        error.response?.data?.message || "Server error"
+      const res = await API.post("/customer/forgot-password", {
+        email
+      });
+
+      alert(res.data.message || "Reset link sent!");
+    } catch (err) {
+      console.log(err);
+      alert(
+        err.response?.data?.message ||
+        "Something went wrong"
       );
     }
+
+    setLoading(false);
   };
 
   return (
@@ -37,8 +45,11 @@ function ForgotPassword() {
       }}
     >
       <Card sx={{ width: 400, borderRadius: 3 }}>
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="h5" mb={3}>
+        <CardContent>
+          <Typography
+            variant="h5"
+            sx={{ textAlign: "center", mb: 3 }}
+          >
             Forgot Password
           </Typography>
 
@@ -47,25 +58,24 @@ function ForgotPassword() {
               fullWidth
               label="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               required
             />
 
             <Button
+              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3 }}
-              type="submit"
+              disabled={loading}
             >
-              Send Reset Link
+              {loading
+                ? "Sending..."
+                : "Send Reset Link"}
             </Button>
           </form>
-
-          {message && (
-            <Typography sx={{ mt: 2, color: "green" }}>
-              {message}
-            </Typography>
-          )}
         </CardContent>
       </Card>
     </Box>
