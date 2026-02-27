@@ -10,7 +10,7 @@ import {
   Divider
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import API from "../customerApi";
+import API from "../api";
 import { GoogleLogin } from "@react-oauth/google";
 
 function CustomerLogin() {

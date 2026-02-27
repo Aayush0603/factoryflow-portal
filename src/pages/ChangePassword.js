@@ -9,7 +9,7 @@ import {
   Alert
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import API from "../customerApi";
+import API from "../api";
 
 function ChangePassword() {
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ import {
   TextField,
   Button
 } from "@mui/material";
-import API from "../customerApi";
+import API from "../api";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
