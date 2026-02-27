@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API from "../api";
 import {
   Box,
   Card,
@@ -7,25 +8,26 @@ import {
   TextField,
   Button
 } from "@mui/material";
-import API from "../api";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await API.post("/customer/forgot-password", {
-      email
-    });
+    try {
+      const res = await API.post("/customer/forgot-password", {
+        email
+      });
 
-    alert(res.data.message);
-  } catch (error) {
-    alert(error.response?.data?.message || "Server error");
-  }
-};
+      setMessage(res.data.message);
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message || "Server error"
+      );
+    }
+  };
 
   return (
     <Box
@@ -38,8 +40,8 @@ function ForgotPassword() {
       }}
     >
       <Card sx={{ width: 400, borderRadius: 3 }}>
-        <CardContent>
-          <Typography variant="h5" textAlign="center" mb={2}>
+        <CardContent sx={{ p: 4 }}>
+          <Typography variant="h5" mb={3}>
             Forgot Password
           </Typography>
 
@@ -49,14 +51,13 @@ function ForgotPassword() {
               label="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
               required
             />
 
             <Button
               fullWidth
               variant="contained"
-              sx={{ mt: 2 }}
+              sx={{ mt: 3 }}
               type="submit"
             >
               Send Reset Link
@@ -64,7 +65,7 @@ function ForgotPassword() {
           </form>
 
           {message && (
-            <Typography mt={2} textAlign="center">
+            <Typography sx={{ mt: 2, color: "green" }}>
               {message}
             </Typography>
           )}
